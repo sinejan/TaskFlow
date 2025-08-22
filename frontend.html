@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Görev Listesi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        #task-list { margin-top: 20px; }
+        li { margin-bottom: 8px; }
+        form { margin-top: 30px; }
+        input, button { margin: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Görevler</h1>
+    <ul id="task-list"></ul>
+
+    <h2>Yeni Görev Ekle</h2>
+    <form id="task-form">
+        <input type="text" id="name" placeholder="Görev Adı" required>
+        <input type="text" id="description" placeholder="Açıklama" required>
+        <input type="text" id="parent_id" placeholder="Üst Görev ID (opsiyonel)">
+        <button type="submit">Ekle</button>
+    </form>
+
+    <script>
+        async function fetchTasks() {
+            const res = await fetch('http://127.0.0.1:5000/get_tasks');
+            const tasks = await res.json();
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = `#${task.id} - ${task.name}: ${task.description}` + 
+                    (task.parent_id ? ` (Üst Görev: ${task.parent_id})` : '');
+                list.appendChild(li);
+            });
+        }
+
+        document.getElementById('task-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const parent_id = document.getElementById('parent_id').value || null;
+
+            const res = await fetch('http://127.0.0.1:5000/add_task', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, description, parent_id })
+            });
+
+            if (res.ok) {
+                document.getElementById('name').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('parent_id').value = '';
+                fetchTasks();
+            } else {
+                const error = await res.json();
+                alert(error.error || 'Görev eklenemedi!');
+            }
+        });
+
+        fetchTasks();
+    </script>
+</body>
+</html> 
