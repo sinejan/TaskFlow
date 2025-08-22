@@ -25,34 +25,47 @@ A full-stack todo application with Flask backend and multiple frontend options.
 
 ```
 todo_project/
-├── backend/
-│   ├── app.py              # Flask API server
-│   └── core/               # Core task management modules
-├── index.html              # Interface selection page
-├── frontend.html           # Simple web interface
-├── frontend_fancy.html     # Modern web interface
-├── requirements.txt        # Python dependencies
-├── start_project.sh        # Startup script
-└── venv/                   # Virtual environment
+├── run_taskflow.sh         # 🚀 ONE-CLICK STARTUP SCRIPT
+├── backend/                # Backend API and core logic
+│   ├── app.py             # Flask API server
+│   └── core/              # Core task management modules
+├── frontend/              # Frontend interfaces
+│   ├── index.html         # Interface selection page
+│   ├── frontend.html      # Simple web interface
+│   ├── frontend_fancy.html # Modern web interface (⭐ Recommended)
+│   └── info.html          # System architecture documentation
+├── docs/                  # Documentation
+│   ├── README.md          # This file
+│   └── PROJECT_STRUCTURE.md # Detailed project structure
+├── scripts/               # Utility scripts
+├── static/                # Static assets (future use)
+├── requirements.txt       # Python dependencies
+└── venv/                  # Virtual environment
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
-1. **Start the project:**
+### One-Click Startup (Recommended)
+```bash
+./run_taskflow.sh
+```
+
+### Alternative Methods
+
+1. **Using the startup script:**
    ```bash
-   ./start_project.sh
+   ./scripts/start_project.sh
    ```
 
 2. **Manual start:**
    ```bash
    # Activate virtual environment
    source venv/bin/activate
-   
+
    # Start backend
-   cd backend
-   python app.py
-   
-   # Open frontend.html in your browser
+   cd backend && python app.py
+
+   # Open frontend/index.html in your browser
    ```
 
 ## API Endpoints

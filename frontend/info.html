@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - System Architecture</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f1f5f9;
+            --accent: #10b981;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-header .icon {
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .architecture-diagram {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0;
+            text-align: center;
+            border: 2px dashed var(--border);
+        }
+
+        .component {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            margin: 0.25rem;
+            font-weight: 500;
+        }
+
+        .arrow {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: var(--accent);
+            font-weight: bold;
+            width: 20px;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tech-item {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .tech-item i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-info-circle"></i> TaskFlow Architecture</h1>
+            <p>Understanding the system infrastructure and logic</p>
+        </header>
+
+        <div class="nav-buttons">
+            <a href="index.html" class="btn">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="frontend_fancy.html" class="btn">
+                <i class="fas fa-tasks"></i> Task Manager
+            </a>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h2>System Architecture Overview</h2>
+                </div>
+                
+                <p>TaskFlow is a full-stack task management application built with a modular architecture that separates concerns between frontend presentation, backend API, and core business logic.</p>
+                
+                <div class="architecture-diagram">
+                    <div class="component">Frontend (HTML/CSS/JS)</div>
+                    <span class="arrow">→</span>
+                    <div class="component">Flask API</div>
+                    <span class="arrow">→</span>
+                    <div class="component">Core Logic</div>
+                    <br><br>
+                    <div class="component">Task Tree</div>
+                    <span class="arrow">↕</span>
+                    <div class="component">Queue System</div>
+                    <span class="arrow">↕</span>
+                    <div class="component">Stack Processing</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h2>Backend Infrastructure</h2>
+                </div>
+                
+                <h3>Core Components:</h3>
+                <ul class="feature-list">
+                    <li><strong>Flask API Server</strong> - RESTful endpoints for task management</li>
+                    <li><strong>Task Tree</strong> - Hierarchical task organization</li>
+                    <li><strong>Task Queue</strong> - FIFO processing of incoming tasks</li>
+                    <li><strong>Task Stack</strong> - LIFO processing for task execution</li>
+                    <li><strong>Threading System</strong> - Concurrent task processing</li>
+                    <li><strong>Alarm System</strong> - Email notifications for due dates</li>
+                </ul>
+
+                <h3>API Endpoints:</h3>
+                <div class="code-block">
+GET  /              # Health check
+POST /add_task      # Create new task
+GET  /get_tasks     # Retrieve all tasks
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h2>Processing Logic Flow</h2>
+                </div>
+                
+                <h3>Task Processing Pipeline:</h3>
+                <ol style="margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>Task Creation</strong> - User creates task via frontend</li>
+                    <li><strong>API Reception</strong> - Flask receives and validates task data</li>
+                    <li><strong>Tree Storage</strong> - Task added to hierarchical tree structure</li>
+                    <li><strong>Queue Enqueue</strong> - Task placed in processing queue</li>
+                    <li><strong>Listener Thread</strong> - Monitors queue and moves tasks to stack</li>
+                    <li><strong>Sender Thread</strong> - Processes tasks from stack</li>
+                    <li><strong>Completion</strong> - Tasks marked as processed</li>
+                </ol>
+
+                <div class="code-block">
+# Threading Architecture
+ListenerThread: Queue → Stack (1 second intervals)
+SenderThread: Stack → Processed (2 second intervals)
+AlarmThread: Check due dates (30 second intervals)
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h2>Frontend Architecture</h2>
+                </div>
+                
+                <h3>Modern Interface Features:</h3>
+                <ul class="feature-list">
+                    <li>Responsive design with CSS Grid and Flexbox</li>
+                    <li>Real-time task statistics dashboard</li>
+                    <li>Hierarchical task visualization</li>
+                    <li>CRUD operations with optimistic UI updates</li>
+                    <li>Dark/Light theme toggle with persistence</li>
+                    <li>Auto-refresh functionality (30-second intervals)</li>
+                    <li>Smooth animations and transitions</li>
+                    <li>Click-to-copy task IDs</li>
+                </ul>
+
+                <h3>Technology Stack:</h3>
+                <div class="tech-stack">
+                    <div class="tech-item">
+                        <i class="fab fa-html5"></i>
+                        <h4>HTML5</h4>
+                        <p>Semantic markup</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-css3-alt"></i>
+                        <h4>CSS3</h4>
+                        <p>Modern styling</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-js"></i>
+                        <h4>JavaScript</h4>
+                        <p>Interactive functionality</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-python"></i>
+                        <h4>Python Flask</h4>
+                        <p>Backend API</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h2>Data Structures</h2>
+                </div>
+                
+                <h3>Task Node Structure:</h3>
+                <div class="code-block">
+{
+  "id": "uuid-string",
+  "name": "Task Name",
+  "description": "Task Description", 
+  "due_date": "ISO-8601 datetime",
+  "children": ["child-id-1", "child-id-2"]
+}
+                </div>
+
+                <h3>Core Data Structures:</h3>
+                <ul class="feature-list">
+                    <li><strong>TaskTree</strong> - Hierarchical organization with parent-child relationships</li>
+                    <li><strong>TaskQueue</strong> - FIFO queue using Python's queue.Queue</li>
+                    <li><strong>TaskStack</strong> - LIFO stack using Python list</li>
+                    <li><strong>ProcessedTasks</strong> - List of completed tasks</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

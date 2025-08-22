@@ -18,7 +18,7 @@ sleep 3
 # Open frontend in browser
 echo "🌐 Opening interface selector in browser..."
 cd ..
-open index.html
+open frontend/index.html
 
 echo "✅ Project started successfully!"
 echo "📍 Backend running at: http://localhost:5000"

@@ -31,7 +31,31 @@ class TaskTree:
         for root in self.root_tasks:
             _print(root)
 
-    def get_all_tasks(self):    
+    def remove_task(self, task_id):
+        """Remove a task from the tree"""
+        def remove_from_children(node):
+            for i, child in enumerate(node.children):
+                if child.id == task_id:
+                    node.children.pop(i)
+                    return True
+                if remove_from_children(child):
+                    return True
+            return False
+
+        # Check if it's a root task
+        for i, root in enumerate(self.root_tasks):
+            if root.id == task_id:
+                self.root_tasks.pop(i)
+                return True
+
+        # Check if it's a child task
+        for root in self.root_tasks:
+            if remove_from_children(root):
+                return True
+
+        return False
+
+    def get_all_tasks(self):
         def traverse(node):
             task_list = [{
                 "id": node.id,

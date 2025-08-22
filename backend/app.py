@@ -52,6 +52,46 @@ def get_tasks():
     all_tasks = tree.get_all_tasks()
     return jsonify(all_tasks), 200
 
+@app.route('/update_task/<task_id>', methods=['PUT'])
+def update_task(task_id):
+    data = request.json
+    name = data.get("name")
+    description = data.get("description")
+
+    if not name or not description:
+        return jsonify({"error": "Name and description required"}), 400
+
+    # Find the task in the tree
+    task = tree.find_by_id(task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    # Update task properties
+    task.name = name
+    task.description = description
+
+    return jsonify({
+        "message": "Task updated successfully.",
+        "task_id": task_id
+    }), 200
+
+@app.route('/delete_task/<task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    # Find the task in the tree
+    task = tree.find_by_id(task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    # Remove task from tree
+    success = tree.remove_task(task_id)
+    if not success:
+        return jsonify({"error": "Failed to delete task"}), 500
+
+    return jsonify({
+        "message": "Task deleted successfully.",
+        "task_id": task_id
+    }), 200
+
 @app.route('/favicon.ico')
 def favicon():
     return '', 204  # No Content

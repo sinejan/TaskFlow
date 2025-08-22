@@ -33,10 +33,11 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) fixed;
             min-height: 100vh;
             color: var(--text-primary);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -176,64 +177,188 @@
         }
 
         .task-list {
-            max-height: 600px;
+            max-height: 70vh;
             overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .task-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .task-list::-webkit-scrollbar-track {
+            background: var(--secondary);
+            border-radius: 3px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
         }
 
         .task-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
             transition: var(--transition);
             animation: slideInLeft 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item.new-task {
+            animation: newTaskAnimation 0.8s ease-out;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
         }
 
         .task-item:hover {
-            transform: translateX(4px);
-            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .task-item:hover::before {
+            opacity: 1;
         }
 
         .task-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .task-title-section {
+            flex: 1;
         }
 
         .task-title {
             font-weight: 600;
             color: var(--text-primary);
-            font-size: 1.1rem;
-        }
-
-        .task-id {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            background: var(--secondary);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Monaco', monospace;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
         }
 
         .task-description {
             color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .task-action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .task-action-btn.edit {
+            background: var(--warning);
+            color: white;
+        }
+
+        .task-action-btn.delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .task-action-btn.add-child {
+            background: var(--accent);
+            color: white;
+        }
+
+        .task-action-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
         }
 
         .task-meta {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
             font-size: 0.85rem;
             color: var(--text-secondary);
+        }
+
+        .task-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .task-children {
             display: flex;
             align-items: center;
             gap: 0.25rem;
+        }
+
+        .task-id-badge {
+            background: var(--secondary);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        .task-id-badge:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .parent-display {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--secondary);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .parent-display span {
+            font-weight: 500;
+            color: var(--text-primary);
         }
 
         .loading {
@@ -339,6 +464,25 @@
             to { transform: rotate(360deg); }
         }
 
+        @keyframes newTaskAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+                border-color: var(--accent);
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+            }
+            50% {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                border-color: var(--border);
+                box-shadow: var(--shadow);
+            }
+        }
+
         /* Dark mode styles */
         [data-theme="dark"] {
             --primary: #8b5cf6;
@@ -357,7 +501,7 @@
         }
 
         [data-theme="dark"] body {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%) fixed;
         }
 
         [data-theme="dark"] .form-input {
@@ -451,14 +595,17 @@
                         <textarea id="description" class="form-input form-textarea" placeholder="Describe your task..." required></textarea>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="parent-selection" style="display: none;">
                         <label class="form-label" for="parent_id">
-                            <i class="fas fa-sitemap"></i> Parent Task ID (Optional)
+                            <i class="fas fa-sitemap"></i> Creating Subtask For
                         </label>
-                        <input type="text" id="parent_id" class="form-input" placeholder="Enter parent task ID...">
-                        <small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem; display: block;">
-                            Leave empty to create a root task
-                        </small>
+                        <div class="parent-display">
+                            <span id="parent-task-name"></span>
+                            <button type="button" class="btn btn-secondary" onclick="clearParentSelection()" style="padding: 0.25rem 0.5rem; margin-left: 0.5rem;">
+                                <i class="fas fa-times"></i> Clear
+                            </button>
+                        </div>
+                        <input type="hidden" id="parent_id">
                     </div>
 
                     <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -485,6 +632,9 @@
         const totalTasksEl = document.getElementById('total-tasks');
         const rootTasksEl = document.getElementById('root-tasks');
         const childTasksEl = document.getElementById('child-tasks');
+
+        // Track new tasks for animation
+        let newTaskId = null;
 
         // Utility functions
         function showNotification(message, type = 'success') {
@@ -515,7 +665,11 @@
         }
 
         function truncateId(id) {
-            return id.substring(0, 8) + '...';
+            return id.substring(0, 12) + '...';
+        }
+
+        function getFullId(id) {
+            return id;
         }
 
         function buildTaskHierarchy() {
@@ -550,36 +704,47 @@
         }
 
         function renderTaskItem(task, level = 0) {
-            const indent = level * 20;
+            const indent = level * 30;
             const hasChildren = task.children && task.children.length > 0;
+            const isNewTask = newTaskId === task.id;
 
             return `
-                <div class="task-item" style="margin-left: ${indent}px; ${level > 0 ? 'border-left: 3px solid var(--primary); margin-top: 0.5rem;' : ''}">
+                <div class="task-item ${isNewTask ? 'new-task' : ''}" style="margin-left: ${indent}px; ${level > 0 ? 'border-left: 3px solid var(--primary); margin-top: 0.5rem;' : ''}">
                     <div class="task-header">
-                        <div class="task-title">
-                            ${level > 0 ? '<i class="fas fa-arrow-turn-down" style="margin-right: 0.5rem; color: var(--primary);"></i>' : ''}
-                            ${task.name}
+                        <div class="task-title-section">
+                            <div class="task-title">
+                                ${level > 0 ? '<i class="fas fa-arrow-turn-down" style="margin-right: 0.5rem; color: var(--primary);"></i>' : ''}
+                                ${task.name}
+                            </div>
+                            <div class="task-description">${task.description}</div>
                         </div>
-                        <div class="task-id" onclick="copyToClipboard('${task.id}')" style="cursor: pointer;" title="Click to copy full ID">
-                            #${truncateId(task.id)}
+                        <div class="task-actions">
+                            <button class="task-action-btn add-child" onclick="setParentId('${task.id}', '${task.name}')" title="Add Subtask">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="task-action-btn edit" onclick="editTask('${task.id}')" title="Edit Task">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="task-action-btn delete" onclick="deleteTask('${task.id}')" title="Delete Task">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="task-description">${task.description}</div>
                     <div class="task-meta">
-                        <div class="task-children">
-                            <i class="fas fa-sitemap"></i>
-                            <span>${task.children ? task.children.length : 0} subtasks</span>
-                        </div>
-                        ${task.due_date ? `
-                            <div>
-                                <i class="fas fa-calendar"></i>
-                                <span>${new Date(task.due_date).toLocaleDateString()}</span>
+                        <div class="task-info">
+                            <div class="task-children">
+                                <i class="fas fa-sitemap"></i>
+                                <span>${task.children ? task.children.length : 0} subtasks</span>
                             </div>
-                        ` : ''}
-                        <div style="margin-left: auto;">
-                            <button class="btn btn-secondary" onclick="setParentId('${task.id}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
-                                <i class="fas fa-plus"></i> Add Subtask
-                            </button>
+                            ${task.due_date ? `
+                                <div>
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${new Date(task.due_date).toLocaleDateString()}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="task-id-badge" onclick="copyToClipboard('${task.id}')" title="Click to copy full ID">
+                            #${getFullId(task.id)}
                         </div>
                     </div>
                 </div>
@@ -611,10 +776,94 @@
             });
         }
 
-        function setParentId(taskId) {
+        function setParentId(taskId, taskName) {
+            const parentIdInput = document.getElementById('parent_id');
+            const parentSelection = document.getElementById('parent-selection');
+            const parentTaskName = document.getElementById('parent-task-name');
+
             parentIdInput.value = taskId;
-            parentIdInput.focus();
-            showNotification('Parent ID set! Now add your subtask.');
+            parentTaskName.textContent = taskName;
+            parentSelection.style.display = 'block';
+
+            // Scroll to form
+            document.getElementById('task-form').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('name').focus();
+
+            showNotification(`Creating subtask for: ${taskName}`);
+        }
+
+        function clearParentSelection() {
+            const parentIdInput = document.getElementById('parent_id');
+            const parentSelection = document.getElementById('parent-selection');
+
+            parentIdInput.value = '';
+            parentSelection.style.display = 'none';
+
+            showNotification('Parent selection cleared');
+        }
+
+        function editTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            const nameInput = document.getElementById('name');
+            const descriptionInput = document.getElementById('description');
+
+            nameInput.value = task.name;
+            descriptionInput.value = task.description;
+
+            // Store the task ID for updating
+            nameInput.dataset.editingId = taskId;
+
+            // Change button text
+            const submitBtn = document.querySelector('#task-form button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Task';
+            submitBtn.style.background = 'var(--warning)';
+
+            // Scroll to form
+            document.getElementById('task-form').scrollIntoView({ behavior: 'smooth' });
+            nameInput.focus();
+
+            showNotification(`Editing: ${task.name}`);
+        }
+
+        function cancelEdit() {
+            const nameInput = document.getElementById('name');
+            const submitBtn = document.querySelector('#task-form button[type="submit"]');
+
+            delete nameInput.dataset.editingId;
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Task';
+            submitBtn.style.background = 'var(--primary)';
+
+            document.getElementById('task-form').reset();
+            clearParentSelection();
+        }
+
+        async function deleteTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            if (!confirm(`Are you sure you want to delete "${task.name}"?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/delete_task/${taskId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to delete task');
+                }
+
+                showNotification('Task deleted successfully!');
+                await fetchTasks();
+
+            } catch (error) {
+                console.error('Error deleting task:', error);
+                showNotification(error.message, 'error');
+            }
         }
 
         async function fetchTasks() {
@@ -655,13 +904,22 @@
 
                 const result = await response.json();
                 showNotification('Task added successfully!');
-                
+
+                // Store new task ID for animation
+                newTaskId = result.task_id;
+
                 // Clear form
                 taskForm.reset();
-                
+                clearParentSelection();
+
                 // Refresh tasks
                 await fetchTasks();
-                
+
+                // Clear new task ID after animation
+                setTimeout(() => {
+                    newTaskId = null;
+                }, 1000);
+
                 return result;
             } catch (error) {
                 console.error('Error adding task:', error);
@@ -673,7 +931,8 @@
         // Event listeners
         taskForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
+            const editingId = nameInput.dataset.editingId;
             const taskData = {
                 name: nameInput.value.trim(),
                 description: descriptionInput.value.trim(),
@@ -685,8 +944,37 @@
                 return;
             }
 
-            await addTask(taskData);
+            if (editingId) {
+                await updateTask(editingId, taskData);
+            } else {
+                await addTask(taskData);
+            }
         });
+
+        async function updateTask(taskId, taskData) {
+            try {
+                const response = await fetch(`${API_BASE}/update_task/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(taskData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to update task');
+                }
+
+                showNotification('Task updated successfully!');
+                cancelEdit();
+                await fetchTasks();
+
+            } catch (error) {
+                console.error('Error updating task:', error);
+                showNotification(error.message, 'error');
+            }
+        }
 
         // Theme management
         function toggleTheme() {
