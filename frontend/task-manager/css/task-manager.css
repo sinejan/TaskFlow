@@ -233,10 +233,8 @@ body {
 
 .tasks-container {
     padding: 1rem;
-    max-height: 60vh;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    min-height: 200px;
+    /* Dynamic height - no max-height or overflow */
 }
 
 /* Task Cards */
@@ -244,14 +242,113 @@ body {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 8px;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     transition: var(--transition);
-    overflow: hidden;
+    position: relative;
 }
 
 .task-card:hover {
     box-shadow: var(--shadow);
-    transform: translateX(4px);
+    transform: translateY(-2px);
+}
+
+/* Hierarchy Lines - Code Editor Style */
+.task-card[data-level="1"] {
+    margin-left: 3rem;
+    border-left: 3px solid #3b82f6;
+    position: relative;
+}
+
+.task-card[data-level="2"] {
+    margin-left: 6rem;
+    border-left: 3px solid #10b981;
+    position: relative;
+}
+
+.task-card[data-level="3"] {
+    margin-left: 9rem;
+    border-left: 3px solid #f59e0b;
+    position: relative;
+}
+
+.task-card[data-level="4"] {
+    margin-left: 12rem;
+    border-left: 3px solid #ef4444;
+    position: relative;
+}
+
+.task-card[data-level="5"] {
+    margin-left: 15rem;
+    border-left: 3px solid #8b5cf6;
+    position: relative;
+}
+
+/* Vertical connecting lines for parent levels */
+.task-card[data-level="1"]:before {
+    content: '';
+    position: absolute;
+    left: -3rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(59, 130, 246, 0.3);
+    z-index: -1;
+}
+
+.task-card[data-level="2"]:before {
+    content: '';
+    position: absolute;
+    left: -6rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(16, 185, 129, 0.3);
+    z-index: -1;
+}
+
+.task-card[data-level="3"]:before {
+    content: '';
+    position: absolute;
+    left: -9rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(245, 158, 11, 0.3);
+    z-index: -1;
+}
+
+.task-card[data-level="4"]:before {
+    content: '';
+    position: absolute;
+    left: -12rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(239, 68, 68, 0.3);
+    z-index: -1;
+}
+
+.task-card[data-level="5"]:before {
+    content: '';
+    position: absolute;
+    left: -15rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(139, 92, 246, 0.3);
+    z-index: -1;
+}
+
+/* Horizontal connecting line */
+.task-card[data-level]:after {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 50%;
+    width: 1.5rem;
+    height: 2px;
+    background: var(--border);
+    transform: translateY(-50%);
 }
 
 .task-header {
@@ -396,28 +493,7 @@ body {
     transform: scale(1.1);
 }
 
-.task-children {
-    padding-left: 2rem;
-    border-top: 1px solid var(--border);
-    background: var(--bg-primary);
-    display: none;
-}
-
-.task-children.expanded {
-    display: block;
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        max-height: 0;
-    }
-    to {
-        opacity: 1;
-        max-height: 1000px;
-    }
-}
+/* Remove old nested children styling - now using flat structure with hierarchy lines */
 
 /* Animations */
 @keyframes fadeInDown {
@@ -621,5 +697,18 @@ body {
 
     .form-actions {
         flex-direction: column;
+    }
+
+    /* Reduce hierarchy indentation on mobile */
+    .task-card[data-level="1"] { margin-left: 1.5rem; }
+    .task-card[data-level="2"] { margin-left: 3rem; }
+    .task-card[data-level="3"] { margin-left: 4.5rem; }
+    .task-card[data-level="4"] { margin-left: 6rem; }
+    .task-card[data-level="5"] { margin-left: 7.5rem; }
+
+    /* Adjust connecting lines for mobile */
+    .task-card[data-level]:after {
+        width: 1rem;
+        left: -1.5rem;
     }
 }

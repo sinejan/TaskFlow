@@ -1,0 +1,109 @@
+{
+  "tasks": {
+    "4a18c940-7c2e-4196-96a9-dba9cca96b1a": {
+      "id": "4a18c940-7c2e-4196-96a9-dba9cca96b1a",
+      "name": "f ff",
+      "description": "afw",
+      "due_date": null,
+      "parent_id": null,
+      "completed": true,
+      "children": [
+        "8d2fd8eb-ec07-4377-b8fc-e11fb45dc278",
+        "9a903425-8b75-4483-bbf0-0bea87af7483"
+      ],
+      "created_at": "2025-08-23T12:21:31.215044",
+      "updated_at": "2025-08-23T12:30:07.827069"
+    },
+    "8d2fd8eb-ec07-4377-b8fc-e11fb45dc278": {
+      "id": "8d2fd8eb-ec07-4377-b8fc-e11fb45dc278",
+      "name": "vsfebgea",
+      "description": "aegeare",
+      "due_date": null,
+      "parent_id": "4a18c940-7c2e-4196-96a9-dba9cca96b1a",
+      "completed": true,
+      "children": [],
+      "created_at": "2025-08-23T12:21:35.510088",
+      "updated_at": "2025-08-23T12:30:13.343633"
+    },
+    "9a903425-8b75-4483-bbf0-0bea87af7483": {
+      "id": "9a903425-8b75-4483-bbf0-0bea87af7483",
+      "name": "egrgea",
+      "description": "ertagae",
+      "due_date": null,
+      "parent_id": "4a18c940-7c2e-4196-96a9-dba9cca96b1a",
+      "completed": true,
+      "children": [
+        "569a914e-ee2d-4e81-a3bf-bcb39610c49f"
+      ],
+      "created_at": "2025-08-23T12:21:51.695653",
+      "updated_at": "2025-08-23T12:30:14.576639"
+    },
+    "569a914e-ee2d-4e81-a3bf-bcb39610c49f": {
+      "id": "569a914e-ee2d-4e81-a3bf-bcb39610c49f",
+      "name": "ebgse",
+      "description": "eabg",
+      "due_date": null,
+      "parent_id": "9a903425-8b75-4483-bbf0-0bea87af7483",
+      "completed": false,
+      "children": [
+        "f2aa1c3f-d248-4ea6-b226-d3f705c8c662"
+      ],
+      "created_at": "2025-08-23T12:21:55.894261"
+    },
+    "f2aa1c3f-d248-4ea6-b226-d3f705c8c662": {
+      "id": "f2aa1c3f-d248-4ea6-b226-d3f705c8c662",
+      "name": "graet",
+      "description": "aeg",
+      "due_date": null,
+      "parent_id": "569a914e-ee2d-4e81-a3bf-bcb39610c49f",
+      "completed": false,
+      "children": [],
+      "created_at": "2025-08-23T12:22:03.013594"
+    },
+    "cf1989e7-8646-430c-b55f-d349abcbd932": {
+      "id": "cf1989e7-8646-430c-b55f-d349abcbd932",
+      "name": "eragea",
+      "description": "ergea",
+      "due_date": null,
+      "parent_id": null,
+      "completed": true,
+      "children": [
+        "5ff56eb4-a64a-40e4-9c58-eee2cae248db",
+        "4cdac884-e295-446c-be5c-8c2b5e57e130"
+      ],
+      "created_at": "2025-08-23T12:22:09.346606",
+      "updated_at": "2025-08-23T12:30:03.030705"
+    },
+    "5ff56eb4-a64a-40e4-9c58-eee2cae248db": {
+      "id": "5ff56eb4-a64a-40e4-9c58-eee2cae248db",
+      "name": "geag",
+      "description": "ag",
+      "due_date": null,
+      "parent_id": "cf1989e7-8646-430c-b55f-d349abcbd932",
+      "completed": true,
+      "children": [],
+      "created_at": "2025-08-23T12:22:14.913794",
+      "updated_at": "2025-08-23T12:30:04.424868"
+    },
+    "4cdac884-e295-446c-be5c-8c2b5e57e130": {
+      "id": "4cdac884-e295-446c-be5c-8c2b5e57e130",
+      "name": "gegbs",
+      "description": "aeg",
+      "due_date": null,
+      "parent_id": "cf1989e7-8646-430c-b55f-d349abcbd932",
+      "completed": true,
+      "children": [],
+      "created_at": "2025-08-23T12:22:18.059681",
+      "updated_at": "2025-08-23T12:30:05.512790"
+    }
+  },
+  "root_task_ids": [
+    "4a18c940-7c2e-4196-96a9-dba9cca96b1a",
+    "cf1989e7-8646-430c-b55f-d349abcbd932"
+  ],
+  "metadata": {
+    "last_updated": "2025-08-23T12:30:14.576650",
+    "total_tasks": 8,
+    "version": "1.0"
+  }
+}

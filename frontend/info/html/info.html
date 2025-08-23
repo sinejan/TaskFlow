@@ -169,6 +169,81 @@
             font-size: 0.9rem;
             overflow-x: auto;
             margin: 1rem 0;
+            white-space: pre-wrap;
+        }
+
+        .flow-diagram {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .flow-step {
+            margin: 1rem 0;
+        }
+
+        .step-box {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 0.5rem;
+            min-width: 150px;
+        }
+
+        .step-box.frontend { background: #3b82f6; color: white; }
+        .step-box.api { background: #10b981; color: white; }
+        .step-box.storage { background: #f59e0b; color: white; }
+        .step-box.file { background: #8b5cf6; color: white; }
+        .step-box.queue { background: #ef4444; color: white; }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .flow-arrow {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+
+        .parallel-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .performance-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .performance-table th,
+        .performance-table td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .performance-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        .project-idea {
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .project-idea h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
         }
 
         .feature-list {
@@ -241,7 +316,7 @@
     <div class="container">
         <header class="header">
             <h1><i class="fas fa-info-circle"></i> TaskFlow Architecture</h1>
-            <p>Understanding the system infrastructure and logic</p>
+            <p>Comprehensive Data Structures & Algorithms Analysis</p>
         </header>
 
         <div class="nav-buttons">
@@ -254,68 +329,446 @@
         </div>
 
         <div class="content-grid">
+            <!-- Data Structures Section -->
             <div class="card">
                 <div class="card-header">
                     <div class="icon">
-                        <i class="fas fa-sitemap"></i>
+                        <i class="fas fa-project-diagram"></i>
                     </div>
-                    <h2>System Architecture Overview</h2>
+                    <h2>Core Data Structures</h2>
                 </div>
-                
-                <p>TaskFlow is a full-stack task management application built with a modular architecture that separates concerns between frontend presentation, backend API, and core business logic.</p>
-                
-                <div class="architecture-diagram">
-                    <div class="component">Frontend (HTML/CSS/JS)</div>
-                    <span class="arrow">→</span>
-                    <div class="component">Flask API</div>
-                    <span class="arrow">→</span>
-                    <div class="component">Core Logic</div>
-                    <br><br>
-                    <div class="component">Task Tree</div>
-                    <span class="arrow">↕</span>
-                    <div class="component">Queue System</div>
-                    <span class="arrow">↕</span>
-                    <div class="component">Stack Processing</div>
-                </div>
-            </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="icon">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <h2>Backend Infrastructure</h2>
-                </div>
-                
-                <h3>Core Components:</h3>
-                <ul class="feature-list">
-                    <li><strong>Flask API Server</strong> - RESTful endpoints for task management</li>
-                    <li><strong>Task Tree</strong> - Hierarchical task organization</li>
-                    <li><strong>Task Queue</strong> - FIFO processing of incoming tasks</li>
-                    <li><strong>Task Stack</strong> - LIFO processing for task execution</li>
-                    <li><strong>Threading System</strong> - Concurrent task processing</li>
-                    <li><strong>Alarm System</strong> - Email notifications for due dates</li>
-                </ul>
-
-                <h3>API Endpoints:</h3>
+                <h3>1. Hash Table (Dictionary) - O(1) Operations</h3>
                 <div class="code-block">
-GET  /              # Health check
-POST /add_task      # Create new task
-GET  /get_tasks     # Retrieve all tasks
+tasks_by_id: Dict[str, Dict] = {
+    "uuid-1": {
+        "id": "uuid-1",
+        "name": "Task Name",
+        "parent_id": None,
+        "children": ["uuid-2", "uuid-3"],
+        "completed": False
+    }
+}
                 </div>
+                <p><strong>Purpose:</strong> Provides O(1) lookup, insertion, and deletion of tasks by ID.</p>
+                <p><strong>Benefits:</strong> Constant time complexity for all basic operations, efficient memory usage.</p>
+
+                <h3>2. Tree Structure - Hierarchical Organization</h3>
+                <div class="code-block">
+Root Tasks: ["uuid-1", "uuid-4"]
+├── Task 1 (uuid-1)
+│   ├── Subtask 1.1 (uuid-2)
+│   └── Subtask 1.2 (uuid-3)
+└── Task 2 (uuid-4)
+    └── Subtask 2.1 (uuid-5)
+                </div>
+                <p><strong>Purpose:</strong> Maintains parent-child relationships for hierarchical task organization.</p>
+                <p><strong>Benefits:</strong> Natural representation of task dependencies, supports nested structures.</p>
+
+                <h3>3. Queue (FIFO) - Task Processing</h3>
+                <div class="code-block">
+class TaskQueue:
+    def __init__(self):
+        self.queue = deque()  # O(1) append/popleft
+
+    def enqueue(self, task):    # O(1)
+        self.queue.append(task)
+
+    def dequeue(self):          # O(1)
+        return self.queue.popleft()
+                </div>
+                <p><strong>Purpose:</strong> First-In-First-Out processing of tasks for background operations.</p>
+                <p><strong>Benefits:</strong> Fair processing order, prevents starvation, efficient for producer-consumer patterns.</p>
+
+                <h3>4. Stack (LIFO) - Undo Operations</h3>
+                <div class="code-block">
+class TaskStack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, task):       # O(1)
+        self.stack.append(task)
+
+    def pop(self):              # O(1)
+        return self.stack.pop()
+                </div>
+                <p><strong>Purpose:</strong> Last-In-First-Out storage for undo/redo functionality.</p>
+                <p><strong>Benefits:</strong> Natural undo behavior, memory efficient, simple implementation.</p>
             </div>
 
+            <!-- Algorithms Section -->
             <div class="card">
                 <div class="card-header">
                     <div class="icon">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <h2>Processing Logic Flow</h2>
+                    <h2>Core Algorithms</h2>
                 </div>
-                
-                <h3>Task Processing Pipeline:</h3>
-                <ol style="margin: 1rem 0; padding-left: 2rem;">
-                    <li><strong>Task Creation</strong> - User creates task via frontend</li>
+
+                <h3>1. Depth-First Search (DFS) - Tree Traversal</h3>
+                <div class="code-block">
+def dfs_traverse(task_id, visited):
+    if task_id in visited:
+        return []
+
+    visited.add(task_id)
+    result = [get_task(task_id)]
+
+    for child_id in get_children(task_id):
+        result.extend(dfs_traverse(child_id, visited))
+
+    return result
+
+Time Complexity: O(V + E) where V = tasks, E = relationships
+Space Complexity: O(h) where h = tree height
+                </div>
+                <p><strong>Usage:</strong> Task deletion (recursive), tree serialization, hierarchy display.</p>
+                <p><strong>Benefits:</strong> Memory efficient, natural for tree structures, handles cycles.</p>
+
+                <h3>2. Breadth-First Search (BFS) - Level-Order Processing</h3>
+                <div class="code-block">
+def calculate_tree_depth():
+    max_depth = 0
+    queue = deque([(root_id, 1) for root_id in root_tasks])
+
+    while queue:
+        task_id, depth = queue.popleft()
+        max_depth = max(max_depth, depth)
+
+        for child_id in get_children(task_id):
+            queue.append((child_id, depth + 1))
+
+    return max_depth
+
+Time Complexity: O(V + E)
+Space Complexity: O(w) where w = maximum width
+                </div>
+                <p><strong>Usage:</strong> Tree depth calculation, level-order operations, shortest path.</p>
+                <p><strong>Benefits:</strong> Finds shortest paths, level-by-level processing, optimal for width-based operations.</p>
+
+                <h3>3. Atomic File Operations - Data Persistence</h3>
+                <div class="code-block">
+def atomic_save(data, filepath):
+    temp_path = filepath + ".tmp"
+
+    # Write to temporary file
+    with open(temp_path, 'w') as f:
+        json.dump(data, f)
+
+    # Atomic rename (POSIX guarantee)
+    os.rename(temp_path, filepath)
+
+Benefits: Prevents data corruption, ensures consistency
+                </div>
+                <p><strong>Usage:</strong> JSON file persistence, crash recovery, data integrity.</p>
+                <p><strong>Benefits:</strong> ACID compliance, prevents corruption, atomic operations.</p>
+            </div>
+
+            <!-- Data Flow Diagram -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-flow-chart"></i>
+                    </div>
+                    <h2>Data Flow Architecture</h2>
+                </div>
+
+                <div class="flow-diagram">
+                    <div class="flow-step">
+                        <div class="step-box frontend">Frontend UI</div>
+                        <div class="step-desc">User interactions, form submissions</div>
+                    </div>
+                    <div class="flow-arrow">↓ HTTP Request</div>
+
+                    <div class="flow-step">
+                        <div class="step-box api">Flask API Layer</div>
+                        <div class="step-desc">Request validation, routing</div>
+                    </div>
+                    <div class="flow-arrow">↓ Function Call</div>
+
+                    <div class="flow-step">
+                        <div class="step-box storage">JSON Storage Service</div>
+                        <div class="step-desc">Hash table operations, file I/O</div>
+                    </div>
+                    <div class="flow-arrow">↓ Atomic Write</div>
+
+                    <div class="flow-step">
+                        <div class="step-box file">tasks.json File</div>
+                        <div class="step-desc">Persistent storage on disk</div>
+                    </div>
+
+                    <div class="parallel-flow">
+                        <div class="flow-arrow">→ Queue Processing</div>
+                        <div class="step-box queue">Task Queue</div>
+                        <div class="flow-arrow">→ Background Threads</div>
+                    </div>
+                </div>
+
+                <h3>Performance Characteristics:</h3>
+                <div class="performance-table">
+                    <table>
+                        <tr><th>Operation</th><th>Time Complexity</th><th>Space Complexity</th></tr>
+                        <tr><td>Add Task</td><td>O(1)</td><td>O(1)</td></tr>
+                        <tr><td>Find Task</td><td>O(1)</td><td>O(1)</td></tr>
+                        <tr><td>Delete Task</td><td>O(k)</td><td>O(h)</td></tr>
+                        <tr><td>Get All Tasks</td><td>O(n)</td><td>O(h)</td></tr>
+                        <tr><td>Tree Traversal</td><td>O(n)</td><td>O(h)</td></tr>
+                    </table>
+                    <p><em>Where n = total tasks, k = subtasks to delete, h = tree height</em></p>
+                </div>
+            </div>
+
+            <!-- JSON Storage Implementation -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h2>JSON Storage Implementation</h2>
+                </div>
+
+                <h3>Storage Structure:</h3>
+                <div class="code-block">
+{
+  "tasks": {
+    "uuid-1": {
+      "id": "uuid-1",
+      "name": "Project Setup",
+      "description": "Initialize project structure",
+      "parent_id": null,
+      "completed": false,
+      "children": ["uuid-2", "uuid-3"],
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:30:00Z"
+    }
+  },
+  "root_task_ids": ["uuid-1", "uuid-4"],
+  "metadata": {
+    "last_updated": "2024-01-01T10:30:00Z",
+    "total_tasks": 5,
+    "version": "1.0"
+  }
+}
+                </div>
+
+                <h3>Benefits of JSON Storage:</h3>
+                <ul class="feature-list">
+                    <li><strong>Human Readable:</strong> Easy to debug and inspect</li>
+                    <li><strong>Language Agnostic:</strong> Can be read by any programming language</li>
+                    <li><strong>Atomic Operations:</strong> Prevents data corruption during writes</li>
+                    <li><strong>Version Control Friendly:</strong> Text-based format works with Git</li>
+                    <li><strong>Backup Friendly:</strong> Simple file copying for backups</li>
+                    <li><strong>No Dependencies:</strong> No database server required</li>
+                </ul>
+
+                <h3>Atomic Write Implementation:</h3>
+                <div class="code-block">
+def atomic_save():
+    temp_file = "tasks.json.tmp"
+
+    # 1. Write to temporary file
+    with open(temp_file, 'w') as f:
+        json.dump(data, f, indent=2)
+
+    # 2. Atomic rename (POSIX guarantee)
+    os.rename(temp_file, "tasks.json")
+
+    # Result: Either old file or new file exists,
+    # never a corrupted partial write
+                </div>
+            </div>
+            <!-- Advanced Features & Project Ideas -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h2>Advanced Data Structure Features</h2>
+                </div>
+
+                <h3>1. Priority Queue Implementation</h3>
+                <div class="code-block">
+import heapq
+
+class PriorityTaskQueue:
+    def __init__(self):
+        self.heap = []  # Min-heap
+        self.counter = 0
+
+    def add_task(self, task, priority):
+        # Lower number = higher priority
+        heapq.heappush(self.heap, (priority, self.counter, task))
+        self.counter += 1
+
+    def get_next_task(self):
+        if self.heap:
+            return heapq.heappop(self.heap)[2]
+        return None
+
+Time Complexity: O(log n) for insert/extract
+Space Complexity: O(n)
+                </div>
+                <p><strong>Use Case:</strong> Task scheduling based on urgency, deadline management.</p>
+
+                <h3>2. Trie (Prefix Tree) for Task Search</h3>
+                <div class="code-block">
+class TaskTrie:
+    def __init__(self):
+        self.root = {}
+        self.task_ids = set()
+
+    def insert(self, task_name, task_id):
+        node = self.root
+        for char in task_name.lower():
+            if char not in node:
+                node[char] = {}
+            node = node[char]
+        node['$'] = task_id  # End marker
+
+    def search_prefix(self, prefix):
+        # Returns all tasks starting with prefix
+        # Time: O(p + k) where p=prefix length, k=results
+        pass
+
+Benefits: Fast autocomplete, fuzzy search, prefix matching
+                </div>
+
+                <h3>3. Graph Algorithms for Dependencies</h3>
+                <div class="code-block">
+class TaskDependencyGraph:
+    def __init__(self):
+        self.graph = defaultdict(list)  # Adjacency list
+        self.in_degree = defaultdict(int)
+
+    def add_dependency(self, task_a, task_b):
+        # task_a depends on task_b
+        self.graph[task_b].append(task_a)
+        self.in_degree[task_a] += 1
+
+    def topological_sort(self):
+        # Kahn's algorithm for task ordering
+        queue = deque([task for task in self.in_degree
+                      if self.in_degree[task] == 0])
+        result = []
+
+        while queue:
+            task = queue.popleft()
+            result.append(task)
+
+            for dependent in self.graph[task]:
+                self.in_degree[dependent] -= 1
+                if self.in_degree[dependent] == 0:
+                    queue.append(dependent)
+
+        return result  # Execution order
+
+Time Complexity: O(V + E)
+Use Case: Task scheduling, dependency resolution
+                </div>
+            </div>
+
+            <!-- Project Enhancement Ideas -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h2>Project Enhancement Ideas</h2>
+                </div>
+
+                <h3>🔥 Advanced Data Structure Projects:</h3>
+
+                <div class="project-idea">
+                    <h4>1. B+ Tree for Large-Scale Storage</h4>
+                    <p><strong>Problem:</strong> Current O(n) file loading becomes slow with 10,000+ tasks</p>
+                    <p><strong>Solution:</strong> Implement B+ Tree for disk-based storage</p>
+                    <div class="code-block">
+Benefits:
+- O(log n) search, insert, delete
+- Efficient range queries
+- Disk-friendly (page-based)
+- Supports millions of tasks
+                    </div>
+                </div>
+
+                <div class="project-idea">
+                    <h4>2. Bloom Filter for Duplicate Detection</h4>
+                    <p><strong>Problem:</strong> Checking for duplicate task names is O(n)</p>
+                    <p><strong>Solution:</strong> Bloom filter for probabilistic duplicate detection</p>
+                    <div class="code-block">
+Benefits:
+- O(1) duplicate checking
+- Memory efficient (bits, not strings)
+- False positives possible, no false negatives
+- Perfect for pre-filtering
+                    </div>
+                </div>
+
+                <div class="project-idea">
+                    <h4>3. LRU Cache for Recent Tasks</h4>
+                    <p><strong>Problem:</strong> Frequently accessed tasks reload from disk</p>
+                    <p><strong>Solution:</strong> Least Recently Used cache with doubly-linked list</p>
+                    <div class="code-block">
+Implementation:
+- HashMap + Doubly Linked List
+- O(1) get, put, delete operations
+- Automatic eviction of old entries
+- Configurable cache size
+                    </div>
+                </div>
+
+                <div class="project-idea">
+                    <h4>4. Segment Tree for Time-Range Queries</h4>
+                    <p><strong>Problem:</strong> "Show tasks due this week" requires full scan</p>
+                    <p><strong>Solution:</strong> Segment tree indexed by due dates</p>
+                    <div class="code-block">
+Benefits:
+- O(log n) range queries
+- O(log n) updates
+- Efficient for time-based filtering
+- Supports complex date ranges
+                    </div>
+                </div>
+
+                <h3>🚀 Algorithm Enhancement Projects:</h3>
+
+                <div class="project-idea">
+                    <h4>5. A* Pathfinding for Task Optimization</h4>
+                    <p><strong>Use Case:</strong> Find optimal task completion order considering dependencies and priorities</p>
+                    <div class="code-block">
+def a_star_task_planning(start_state, goal_state):
+    # Heuristic: estimated time to complete remaining tasks
+    # Cost: actual time spent + priority penalties
+    # Goal: minimize total completion time
+                    </div>
+                </div>
+
+                <div class="project-idea">
+                    <h4>6. Machine Learning Task Prediction</h4>
+                    <p><strong>Use Case:</strong> Predict task completion time based on historical data</p>
+                    <div class="code-block">
+Features:
+- Task complexity (description length, subtask count)
+- User behavior patterns
+- Historical completion times
+- Time of day/week effects
+
+Algorithm: Random Forest or Neural Network
+                    </div>
+                </div>
+
+                <div class="project-idea">
+                    <h4>7. Distributed Hash Table (DHT)</h4>
+                    <p><strong>Use Case:</strong> Scale to multiple servers with consistent hashing</p>
+                    <div class="code-block">
+Benefits:
+- Horizontal scaling
+- Fault tolerance
+- Load distribution
+- Consistent hashing for minimal data movement
+                    </div>
+                </div>
+            </div>
                     <li><strong>API Reception</strong> - Flask receives and validates task data</li>
                     <li><strong>Tree Storage</strong> - Task added to hierarchical tree structure</li>
                     <li><strong>Queue Enqueue</strong> - Task placed in processing queue</li>

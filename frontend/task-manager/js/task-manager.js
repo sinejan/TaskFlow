@@ -66,7 +66,7 @@ class TaskManager {
     renderTasks() {
         const container = document.getElementById('tasks-container');
         container.innerHTML = '';
-        
+
         if (this.tasks.length === 0) {
             container.innerHTML = `
                 <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
@@ -77,17 +77,57 @@ class TaskManager {
             return;
         }
 
-        this.tasks.forEach(task => {
-            if (!task.parent_id) { // Only render root tasks
-                container.appendChild(this.createTaskElement(task));
-            }
+        // Render all tasks in flat structure with hierarchy levels
+        this.renderTasksFlat(container);
+    }
+
+    renderTasksFlat(container) {
+        // Start with root tasks
+        const rootTasks = this.tasks.filter(task => !task.parent_id);
+
+        rootTasks.forEach(task => {
+            this.renderTaskWithChildren(container, task, 0);
         });
     }
 
-    createTaskElement(task) {
+    renderTaskWithChildren(container, task, level) {
+        // Only render if task should be visible (expanded or root)
+        if (level === 0 || this.isTaskVisible(task)) {
+            const taskElement = this.createTaskElement(task, level);
+            container.appendChild(taskElement);
+        }
+
+        // Render children if parent is expanded
+        if (this.expandedTasks.has(task.id)) {
+            const children = this.getChildTasks(task.id);
+            children.forEach(childTask => {
+                this.renderTaskWithChildren(container, childTask, level + 1);
+            });
+        }
+    }
+
+    isTaskVisible(task) {
+        // Check if all parent tasks are expanded
+        let currentTask = task;
+        while (currentTask.parent_id) {
+            const parent = this.tasks.find(t => t.id === currentTask.parent_id);
+            if (!parent || !this.expandedTasks.has(parent.id)) {
+                return false;
+            }
+            currentTask = parent;
+        }
+        return true;
+    }
+
+    createTaskElement(task, level = 0) {
         const taskDiv = document.createElement('div');
         taskDiv.className = 'task-card';
         taskDiv.dataset.taskId = task.id;
+
+        // Set hierarchy level for styling
+        if (level > 0) {
+            taskDiv.dataset.level = Math.min(level, 5); // Max 5 levels for styling
+        }
 
         const hasChildren = this.getChildTasks(task.id).length > 0;
         const isExpanded = this.expandedTasks.has(task.id);
@@ -126,17 +166,6 @@ class TaskManager {
                 </div>
             </div>
         `;
-
-        if (hasChildren) {
-            const childrenDiv = document.createElement('div');
-            childrenDiv.className = `task-children ${isExpanded ? 'expanded' : ''}`;
-
-            this.getChildTasks(task.id).forEach(childTask => {
-                childrenDiv.appendChild(this.createTaskElement(childTask));
-            });
-
-            taskDiv.appendChild(childrenDiv);
-        }
 
         return taskDiv;
     }
