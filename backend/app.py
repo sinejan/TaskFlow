@@ -92,6 +92,22 @@ def delete_task(task_id):
         "task_id": task_id
     }), 200
 
+@app.route('/toggle_task_completion/<task_id>', methods=['PUT'])
+def toggle_task_completion(task_id):
+    # Find the task in the tree
+    task = tree.find_by_id(task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    # Toggle completion status
+    task.completed = not task.completed
+
+    return jsonify({
+        "message": "Task completion status updated.",
+        "task_id": task_id,
+        "completed": task.completed
+    }), 200
+
 @app.route('/favicon.ico')
 def favicon():
     return '', 204  # No Content

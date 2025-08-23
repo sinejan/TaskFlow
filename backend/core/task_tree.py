@@ -62,6 +62,8 @@ class TaskTree:
                 "name": node.name,
                 "description": node.description,
                 "due_date": node.due_date,
+                "parent_id": node.parent_id,
+                "completed": node.completed,
                 "children": [child.id for child in node.children]
             }]
             for child in node.children:
